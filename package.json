@@ -1,0 +1,22 @@
+{
+  "name": "open-music-app",
+  "version": "1.0.0",
+  "description": "Open Music App",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tafhdev",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^21.3.12",
+    "dotenv": "^16.4.7",
+    "joi": "^17.13.3",
+    "nanoid": "^5.0.9",
+    "node-pg-migrate": "^7.9.0",
+    "pg": "^8.13.1"
+  }
+}
