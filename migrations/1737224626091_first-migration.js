@@ -9,7 +9,7 @@ exports.up = (pgm) => {
 
   pgm.createTable('songs', {
     id: { type: 'VARCHAR(25)', primaryKey: true }, //"song-Qbax5Oy7L8WKf74l", song-16digitrandom
-    albumId: {
+    album_id: {
       type: 'VARCHAR(25)',
       references: 'albums(id)',
       onDelete: 'CASCADE',
