@@ -14,12 +14,12 @@ class AlbumHandler {
 
     const { name, year } = request.payload;
 
-    const album = await this._service.insertAlbum({ name, year });
+    const albumId = await this._service.insertAlbum({ name, year });
 
     const response = h.response({
       status: 'success',
       data: {
-        album,
+        albumId: albumId,
       },
     });
     response.code(201);

@@ -3,7 +3,7 @@ const { Pool } = require('pg');
 const InvariantError = require('../exceptions/invariant-error');
 const formatDateTime = require('../lib/date-time');
 const NotFoundError = require('../exceptions/not-found-error');
-const { mapAlbumDbtoAlbumModel } = require('../utils');
+const { mapAlbumDbtoAlbumModel, mapSongDbtoSongModel } = require('../utils');
 
 class AlbumService {
   constructor() {
@@ -16,7 +16,7 @@ class AlbumService {
     const updatedAt = createdAt;
 
     const query = {
-      text: 'INSERT INTO albums VALUES($1, $2, $3, $4, $5) RETURNING id, name, year',
+      text: 'INSERT INTO albums VALUES($1, $2, $3, $4, $5) RETURNING id',
       values: [id, name, year, createdAt, updatedAt],
     };
 
@@ -26,21 +26,31 @@ class AlbumService {
       throw new InvariantError('Failed to create album');
     }
 
-    return result.rows[0];
+    return result.rows[0].id;
   }
 
   async findAlbumById(id) {
-    const query = {
+    const queryAlbum = {
       text: 'SELECT * FROM albums WHERE id = $1',
       values: [id],
     };
-    const result = await this._pool.query(query);
-    console.log(result);
-    if (result.rowCount !== 1) {
+    const album = await this._pool.query(queryAlbum);
+
+    if (album.rowCount !== 1) {
       throw new NotFoundError('Album not found');
     }
 
-    return result.rows.map(mapAlbumDbtoAlbumModel)[0];
+    const queryListSongs = {
+      text: 'SELECT * FROM songs WHERE album_id = $1',
+      values: [album.rows[0].id],
+    };
+
+    const songs = await this._pool.query(queryListSongs);
+    const newAlbum = album.rows.map(mapAlbumDbtoAlbumModel)[0];
+
+    newAlbum.songs = songs.rows.map(mapSongDbtoSongModel);
+
+    return newAlbum;
   }
 
   async updateAlbumById(id, { name, year }) {

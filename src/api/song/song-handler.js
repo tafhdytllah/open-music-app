@@ -6,6 +6,7 @@ class SongHandler {
     this.postSongHandler = this.postSongHandler.bind(this);
     this.getSongsHandler = this.getSongsHandler.bind(this);
     this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
+    this.putSongByIdHandler = this.putSongByIdHandler.bind(this);
     this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
   }
 
@@ -15,7 +16,7 @@ class SongHandler {
     const { title, year, genre, performer, duration, albumId } =
       request.payload;
 
-    const song = await this._service.insertSong({
+    const songId = await this._service.insertSong({
       title,
       year,
       genre,
@@ -27,7 +28,7 @@ class SongHandler {
     const response = h.response({
       status: 'success',
       data: {
-        song,
+        songId: songId,
       },
     });
     response.code(201);
@@ -56,6 +57,19 @@ class SongHandler {
       },
     });
     return response;
+  }
+
+  async putSongByIdHandler(request) {
+    this._validator.validateSongPayload(request.payload);
+
+    const { id } = request.params;
+
+    await this._service.updateSongById(id, request.payload);
+
+    return {
+      status: 'success',
+      message: 'Song has been successfully updated',
+    };
   }
 
   async deleteSongByIdHandler(request) {
