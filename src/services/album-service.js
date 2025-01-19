@@ -35,12 +35,26 @@ class AlbumService {
       values: [id],
     };
     const result = await this._pool.query(query);
-
-    if (!result.rows.length) {
+    console.log(result);
+    if (result.rowCount !== 1) {
       throw new NotFoundError('Album not found');
     }
 
     return result.rows.map(mapAlbumDbtoAlbumModel)[0];
+  }
+
+  async updateAlbumById(id, { name, year }) {
+    const updatedAt = formatDateTime(new Date());
+    const query = {
+      text: 'UPDATE albums SET name = $1, year = $2, updated_at = $3 WHERE id = $4',
+      values: [name, year, updatedAt, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rowCount !== 1) {
+      throw new NotFoundError(`Failed edit album, ${id} is not found`);
+    }
   }
 }
 
