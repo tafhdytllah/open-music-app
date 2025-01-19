@@ -13,7 +13,6 @@ class SongService {
   async insertSong({ title, year, genre, performer, duration, albumId }) {
     const id = `song-${nanoid(16)}`;
     const createdAt = formatDateTime(new Date());
-    const updatedAt = createdAt;
 
     if (albumId !== undefined) {
       const findAlbumById = {
@@ -31,18 +30,8 @@ class SongService {
     }
 
     const query = {
-      text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id',
-      values: [
-        id,
-        albumId,
-        title,
-        year,
-        genre,
-        performer,
-        duration,
-        createdAt,
-        updatedAt,
-      ],
+      text: 'INSERT INTO songs VALUES($1, $2, $3, $4, $5, $6, $7, $8, $8) RETURNING id',
+      values: [id, albumId, title, year, genre, performer, duration, createdAt],
     };
 
     const result = await this._pool.query(query);
