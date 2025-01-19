@@ -35,14 +35,30 @@ class SongHandler {
     return response;
   }
 
-  async getSongsHandler() {
+  async getSongsHandler(request, h) {
+    const { title, performer } = request.query;
+    await this._validator.validateSongQuery({ title, performer });
+
     const songs = await this._service.listSongs();
-    return {
+
+    const filteredSongs = songs.filter((song) => {
+      const matchTitle = title
+        ? song.title.toLowerCase().includes(title.toLowerCase())
+        : true;
+      const matchPerformer = performer
+        ? song.performer.toLowerCase().includes(performer.toLowerCase())
+        : true;
+      return matchTitle && matchPerformer;
+    });
+
+    const response = h.response({
       status: 'success',
       data: {
-        songs,
+        songs: filteredSongs,
       },
-    };
+    });
+
+    return response;
   }
 
   async getSongByIdHandler(request, h) {

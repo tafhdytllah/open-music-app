@@ -132,8 +132,8 @@ Descrption : Searching song with title or performer
 
 Query Param :
 
-- title : string, song title, using like query, optional
-- performer : string, song performer, using like query, optional
+- title : string, song title, using filter, optional
+- performer : string, song performer, using filter, optional
 
 Request Hedaer :
 

@@ -78,7 +78,6 @@ class SongService {
     { title, year, genre, performer, duration, albumId }
   ) {
     if (albumId !== undefined) {
-      console.log(albumId);
       const findAlbumById = {
         text: 'SELECT id FROM albums WHERE id = $1',
         values: [albumId],
@@ -97,7 +96,7 @@ class SongService {
       text: 'UPDATE songs SET album_id = $1, title = $2, year = $3, genre = $4, performer = $5, duration = $6, updated_at = $7 WHERE id = $8',
       values: [albumId, title, year, genre, performer, duration, updatedAt, id],
     };
-    console.log(query);
+
     const result = await this._pool.query(query);
 
     if (result.rowCount === 0) {
