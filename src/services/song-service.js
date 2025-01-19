@@ -3,6 +3,7 @@ const { Pool } = require('pg');
 const formatDateTime = require('../lib/date-time');
 const InvariantError = require('../exceptions/invariant-error');
 const NotFoundError = require('../exceptions/not-found-error');
+const { mapSongDbtoSongModel } = require('../utils');
 
 class SongService {
   constructor() {
@@ -51,6 +52,11 @@ class SongService {
     }
 
     return result.rows[0];
+  }
+
+  async listSongs() {
+    const result = await this._pool.query('SELECT * FROM songs');
+    return result.rows.map(mapSongDbtoSongModel);
   }
 }
 
