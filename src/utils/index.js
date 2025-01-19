@@ -1,4 +1,10 @@
-const mapAlbumDbtoAlbumModel = ({ id, name, year }) => ({
+const mapAlbumDbtoAlbumModel = ({
+  id,
+  name,
+  year,
+  created_at,
+  updated_at,
+}) => ({
   id,
   name,
   year,

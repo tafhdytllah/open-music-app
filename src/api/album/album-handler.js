@@ -4,6 +4,7 @@ class AlbumHandler {
     this._validator = validator;
 
     this.postAlbumHandler = this.postAlbumHandler.bind(this);
+    this.getAlbumByIdHandler = this.getAlbumByIdHandler.bind(this);
   }
 
   async postAlbumHandler(request, h) {
@@ -11,7 +12,7 @@ class AlbumHandler {
 
     const { name, year } = request.payload;
 
-    const album = await this._service.addAlbum({ name, year });
+    const album = await this._service.insertAlbum({ name, year });
 
     const response = h.response({
       status: 'success',
@@ -21,6 +22,18 @@ class AlbumHandler {
     });
     response.code(201);
     return response;
+  }
+
+  async getAlbumByIdHandler(request) {
+    const { id } = request.params;
+
+    const album = await this._service.findAlbumById(id);
+    return {
+      status: 'success',
+      data: {
+        album,
+      },
+    };
   }
 }
 
