@@ -48,7 +48,8 @@ class AlbumService {
     const songs = await this._pool.query(queryListSongs);
     const newAlbum = album.rows.map(mapAlbumDbtoAlbumModel)[0];
 
-    newAlbum.songs = songs.rows.map(mapSongDbtoSongModel);
+    newAlbum.songs =
+      songs.rows.length !== 0 ? songs.rows.map(mapSongDbtoSongModel) : [];
 
     return newAlbum;
   }
