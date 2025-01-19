@@ -6,6 +6,7 @@ class SongHandler {
     this.postSongHandler = this.postSongHandler.bind(this);
     this.getSongsHandler = this.getSongsHandler.bind(this);
     this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
+    this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
   }
 
   async postSongHandler(request, h) {
@@ -55,6 +56,16 @@ class SongHandler {
       },
     });
     return response;
+  }
+
+  async deleteSongByIdHandler(request) {
+    const { id } = request.params;
+    await this._service.removeSongById(id);
+
+    return {
+      status: 'success',
+      message: 'Song has been successfully deleted',
+    };
   }
 }
 
