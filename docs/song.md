@@ -29,11 +29,7 @@ Response Body (201 CREATED) :
 {
   "status": "success",
   "data": {
-    "song": {
-      "id": "song-Qalokam7L8WKf74l",
-      "title": "Lost!",
-      "performer": "Coldplay"
-    }
+    "songId": "song_id"
   }
 }
 ```

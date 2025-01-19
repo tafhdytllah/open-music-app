@@ -25,11 +25,7 @@ Response Body (201 CREATED) :
 {
   "status": "success",
   "data": {
-    "album": {
-      "id": "album-Mk8AnmCp210PwT6B",
-      "name": "Viva la Vida",
-      "year": 2008
-    }
+    "albumId": "album_id"
   }
 }
 ```
