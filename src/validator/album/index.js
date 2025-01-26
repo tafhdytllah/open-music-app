@@ -1,7 +1,13 @@
 const InvariantError = require("../../exceptions/invariant-error");
 const { AlbumPayloadSchema } = require("./schema");
 
+/**
+ * @typedef {import('./schema').AlbumPayloadSchema} AlbumPayloadSchema
+ */
 const AlbumValidator = {
+  /**
+   * @param {AlbumPayloadSchema} payload
+   */
   validateAlbumPayload: (payload) => {
     const validationResult = AlbumPayloadSchema.validate(payload);
     if (validationResult.error) {

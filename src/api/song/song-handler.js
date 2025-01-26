@@ -1,9 +1,20 @@
 class SongHandler {
+  /**
+   * Creates an instance of SongHandler.
+   * @param {Object} service - The service instance.
+   * @param {Object} validator - The validator instance.
+   */
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
   }
 
+  /**
+   * Handles the request to add a new song.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
   async postSongHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
 
@@ -30,6 +41,12 @@ class SongHandler {
     return response;
   }
 
+  /**
+   * Handles the request to get all songs.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object containing the list of songs.
+   */
   async getSongsHandler(request, h) {
     const { title, performer } = request.query;
     await this._validator.validateSongQuery({ title, performer });
@@ -56,6 +73,13 @@ class SongHandler {
     return response;
   }
 
+  /**
+   * Handles the request to get a song by its ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object containing the song details.
+   * @throws {NotFoundError} If the song is not found.
+   */
   async getSongByIdHandler(request, h) {
     const { id } = request.params;
 
@@ -71,6 +95,13 @@ class SongHandler {
     return response;
   }
 
+  /**
+   * Handles the request to update a song by its ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   * @throws {NotFoundError} If the song is not found.
+   */
   async putSongByIdHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
 
@@ -87,6 +118,13 @@ class SongHandler {
     return response;
   }
 
+  /**
+   * Handles the request to delete a song by its ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   * @throws {NotFoundError} If the song is not found.
+   */
   async deleteSongByIdHandler(request, h) {
     const { id } = request.params;
     await this._service.removeSongById(id);

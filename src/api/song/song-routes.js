@@ -1,4 +1,5 @@
 /**
+ * Defines the routes for the song API.
  * @param {import("./song-handler")} handler
  */
 const songRoutes = (handler) => [

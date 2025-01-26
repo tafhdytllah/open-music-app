@@ -1,5 +1,8 @@
 const Joi = require("joi");
 
+/**
+ * Schema for Song Payload
+ */
 const SongPayloadSchema = Joi.object({
   title: Joi.string().required(),
   year: Joi.number()

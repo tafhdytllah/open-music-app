@@ -1,9 +1,20 @@
 class AlbumHandler {
+  /**
+   * Creates an instance of AlbumHandler.
+   * @param {Object} service - The service instance.
+   * @param {Object} validator - The validator instance.
+   */
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
   }
 
+  /**
+   * Handles the request to add a new album.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
   async postAlbumHandler(request, h) {
     this._validator.validateAlbumPayload(request.payload);
 
@@ -22,6 +33,12 @@ class AlbumHandler {
     return response;
   }
 
+  /**
+   * Handles the request to get an album by its ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
   async getAlbumByIdHandler(request, h) {
     const { id } = request.params;
 
@@ -38,6 +55,12 @@ class AlbumHandler {
     return response;
   }
 
+  /**
+   * Handles the request to update an album by its ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
   async putAlbumByIdHandler(request, h) {
     this._validator.validateAlbumPayload(request.payload);
     const { id } = request.params;
@@ -53,6 +76,12 @@ class AlbumHandler {
     return response;
   }
 
+  /**
+   * Handles the request to delete an album by its ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
   async deleteAlbumByIdHandler(request, h) {
     const { id } = request.params;
     await this._service.deleteAlbumById(id);
