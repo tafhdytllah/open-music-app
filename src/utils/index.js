@@ -1,26 +1,10 @@
-const mapAlbumDbtoAlbumModel = ({
-  id,
-  name,
-  year,
-  created_at,
-  updated_at,
-}) => ({
+const mapAlbumDbtoAlbumModel = ({ id, name, year }) => ({
   id,
   name,
   year,
 });
 
-const mapSongDbtoSongModel = ({
-  id,
-  album_id,
-  title,
-  year,
-  genre,
-  performer,
-  duration,
-  created_at,
-  updated_at,
-}) => ({
+const mapSongDbtoSongModel = ({ id, title, performer }) => ({
   id,
   title: title,
   performer: performer,

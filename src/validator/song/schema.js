@@ -1,4 +1,4 @@
-const Joi = require('joi');
+const Joi = require("joi");
 
 const SongPayloadSchema = Joi.object({
   title: Joi.string().required(),
@@ -14,8 +14,8 @@ const SongPayloadSchema = Joi.object({
 });
 
 const SongQuerySchema = Joi.object({
-  title: Joi.string().empty('').optional(),
-  performer: Joi.string().empty('').optional(),
+  title: Joi.string().empty("").optional(),
+  performer: Joi.string().empty("").optional(),
 });
 
 module.exports = { SongPayloadSchema, SongQuerySchema };

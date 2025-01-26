@@ -1,13 +1,13 @@
 exports.up = (pgm) => {
-  pgm.createTable('albums', {
-    id: { type: 'VARCHAR(25)', primaryKey: true }, //"album-Mk8AnmCp210PwT6B", album-16digitrandom
-    name: { type: 'TEXT', notNull: true },
-    year: { type: 'integer', notNull: true },
-    created_at: { type: 'TEXT', notNull: true },
-    updated_at: { type: 'TEXT', notNull: true },
+  pgm.createTable("albums", {
+    id: { type: "VARCHAR(25)", primaryKey: true }, //"album-Mk8AnmCp210PwT6B", album-16digitrandom
+    name: { type: "TEXT", notNull: true },
+    year: { type: "integer", notNull: true },
+    created_at: { type: "TEXT", notNull: true },
+    updated_at: { type: "TEXT", notNull: true },
   });
 };
 
 exports.down = (pgm) => {
-  pgm.dropTable('albums');
+  pgm.dropTable("albums");
 };

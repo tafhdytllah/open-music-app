@@ -2,12 +2,6 @@ class SongHandler {
   constructor(service, validator) {
     this._service = service;
     this._validator = validator;
-
-    this.postSongHandler = this.postSongHandler.bind(this);
-    this.getSongsHandler = this.getSongsHandler.bind(this);
-    this.getSongByIdHandler = this.getSongByIdHandler.bind(this);
-    this.putSongByIdHandler = this.putSongByIdHandler.bind(this);
-    this.deleteSongByIdHandler = this.deleteSongByIdHandler.bind(this);
   }
 
   async postSongHandler(request, h) {
@@ -26,12 +20,13 @@ class SongHandler {
     });
 
     const response = h.response({
-      status: 'success',
+      status: "success",
       data: {
         songId: songId,
       },
     });
     response.code(201);
+
     return response;
   }
 
@@ -52,7 +47,7 @@ class SongHandler {
     });
 
     const response = h.response({
-      status: 'success',
+      status: "success",
       data: {
         songs: filteredSongs,
       },
@@ -67,35 +62,42 @@ class SongHandler {
     const song = await this._service.getSongById(id);
 
     const response = h.response({
-      status: 'success',
+      status: "success",
       data: {
         song,
       },
     });
+
     return response;
   }
 
-  async putSongByIdHandler(request) {
+  async putSongByIdHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
 
     const { id } = request.params;
 
     await this._service.updateSongById(id, request.payload);
 
-    return {
-      status: 'success',
-      message: 'Song has been successfully updated',
-    };
+    const response = h.response({
+      status: "success",
+      message: "Song has been successfully updated",
+    });
+    response.code(200);
+
+    return response;
   }
 
-  async deleteSongByIdHandler(request) {
+  async deleteSongByIdHandler(request, h) {
     const { id } = request.params;
     await this._service.removeSongById(id);
 
-    return {
-      status: 'success',
-      message: 'Song has been successfully deleted',
-    };
+    const response = h.response({
+      status: "success",
+      message: "Song has been successfully deleted",
+    });
+    response.code(200);
+
+    return response;
   }
 }
 

@@ -1,5 +1,5 @@
-const InvariantError = require('../../exceptions/invariant-error');
-const { SongPayloadSchema, SongQuerySchema } = require('./schema');
+const InvariantError = require("../../exceptions/invariant-error");
+const { SongPayloadSchema, SongQuerySchema } = require("./schema");
 
 const SongValidator = {
   validateSongPayload: (payload) => {
@@ -7,7 +7,7 @@ const SongValidator = {
     if (validationResult.error) {
       const errorMessage = validationResult.error.details[0].message.replace(
         /"/g,
-        ''
+        "",
       );
       throw new InvariantError(errorMessage);
     }
@@ -17,7 +17,7 @@ const SongValidator = {
     if (validationResult.error) {
       const errorMessage = validationResult.error.details[0].message.replace(
         /"/g,
-        ''
+        "",
       );
       throw new InvariantError(errorMessage);
     }

@@ -1,11 +1,21 @@
+import globals from "globals";
+import pluginJs from "@eslint/js";
+
+/** @type {import('eslint').Linter.Config[]} */
 export default [
   {
-    files: ['**/*.js'], // Apply this configuration to all JavaScript files
+    files: ["**/*.js"],
     languageOptions: {
-      ecmaVersion: 'latest',
-    },
-    env: {
-      node: true, // Enable Node.js global variables like 'process'
+      sourceType: "commonjs",
+      globals: {
+        process: "readonly", // Definisikan 'process' sebagai variabel global
+      },
     },
   },
+  {
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+  pluginJs.configs.recommended,
 ];

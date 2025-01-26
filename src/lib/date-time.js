@@ -1,9 +1,9 @@
-const { format } = require('date-fns');
-const { toZonedTime } = require('date-fns-tz');
+const { format } = require("date-fns");
+const { toZonedTime } = require("date-fns-tz");
 
 const formatDateTime = (dateTime) => {
   // Konversi ke zona waktu tertentu (misalnya Asia/Jakarta)
-  const timeZone = 'Asia/Jakarta';
+  const timeZone = "Asia/Jakarta";
   const zonedTime = toZonedTime(dateTime, timeZone);
 
   // Format waktu dengan offset zona waktu
