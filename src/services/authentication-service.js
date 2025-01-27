@@ -12,7 +12,6 @@ class AuthenticationService {
    * @returns {Promise<void>} A promise that resolves when the token is added.
    */
   async addRefreshToken(token) {
-    console.log("addRefreshToken");
     const query = {
       text: "INSERT INTO authentications VALUES($1)",
       values: [token],
