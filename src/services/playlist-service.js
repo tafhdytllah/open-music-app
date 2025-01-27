@@ -2,7 +2,10 @@ const { nanoid } = require("nanoid");
 const { Pool } = require("pg");
 const formatDateTime = require("../lib/date-time");
 const InvariantError = require("../exceptions/invariant-error");
-const { mapPlaylistDbtoPlaylistModel } = require("../utils");
+const {
+  mapPlaylistDbtoPlaylistModel,
+  mapSongDbtoSongModel,
+} = require("../utils");
 const NotFoundError = require("../exceptions/not-found-error");
 const AuthorizationError = require("../exceptions/authorization-error");
 
@@ -90,6 +93,36 @@ class PlaylistService {
     const result = await this._pool.query(query);
 
     return result.rows.map(mapPlaylistDbtoPlaylistModel);
+  }
+
+  /**
+   * Retrieves songs from a playlist.
+   * @param {string} playlistId - The ID of the playlist.
+   * @returns {Promise<Object>} A promise that resolves to an object containing the playlist ID, name, owner, and an array of song objects in the playlist.
+   * @throws {NotFoundError} If the playlist is not found.
+   */
+  async getSongsFromPlaylist(playlistId) {
+    const query = {
+      text: "SELECT p.id AS playlist_id, p.name AS playlist_name, u.username AS owner_username, s.id AS id, s.title AS title, s.performer AS performer FROM playlist_songs AS ps INNER JOIN songs AS s ON s.id = ps.song_id INNER JOIN playlists AS p ON p.id = ps.playlist_id INNER JOIN users AS u ON u.id = p.owner WHERE ps.playlist_id = $1",
+      values: [playlistId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rows.length === 0) {
+      throw new NotFoundError("Playlist tidak ditemukan");
+    }
+
+    const songs = result.rows.map(mapSongDbtoSongModel);
+
+    const playlist = {
+      id: result.rows[0].playlist_id,
+      name: result.rows[0].playlist_name,
+      username: result.rows[0].owner_username,
+      songs: songs,
+    };
+
+    return playlist;
   }
 
   /**

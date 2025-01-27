@@ -93,6 +93,32 @@ class PlaylistHandler {
   }
 
   /**
+   * Handles the request to get songs from a playlist.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object containing the list of songs in the playlist.
+   */
+  async getSongsFromPlaylistHandler(request, h) {
+    const { id: playlistId } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._playlistService.verifyPlaylistOwner(playlistId, credentialId);
+
+    const playlist = await this._playlistService.getSongsFromPlaylist(
+      playlistId,
+    );
+
+    const response = h.response({
+      status: "success",
+      data: {
+        playlist,
+      },
+    });
+    response.code(200);
+    return response;
+  }
+
+  /**
    * Handles the request to delete a playlist by its ID.
    * @param {Object} request - The request object.
    * @param {Object} h - The response toolkit.
