@@ -139,6 +139,31 @@ class PlaylistHandler {
     response.code(200);
     return response;
   }
+
+  /**
+   * Handles the request to delete a song from a playlist by song ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
+  async deleteSongFromPlaylistBySongId(request, h) {
+    this._validator.validateDeleteSongFromPlaylistPayload(request.payload);
+
+    const { id } = request.params;
+    const { songId } = request.payload;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._playlistService.verifyPlaylistOwner(id, credentialId);
+
+    await this._playlistService.deleteSongFromPlaylistBySongId(id, songId);
+
+    const response = h.response({
+      status: "success",
+      message: "Lagu berhasil dihapus dari playlist",
+    });
+    response.code(200);
+    return response;
+  }
 }
 
 module.exports = PlaylistHandler;

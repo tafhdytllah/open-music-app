@@ -142,6 +142,26 @@ class PlaylistService {
       throw new NotFoundError("Playlist tidak ditemukan");
     }
   }
+
+  /**
+   * Deletes a song from a playlist by song ID.
+   * @param {string} playlistId - The ID of the playlist.
+   * @param {string} songId - The ID of the song to delete.
+   * @returns {Promise<void>} A promise that resolves when the song is deleted from the playlist.
+   * @throws {NotFoundError} If the song is not found in the playlist.
+   */
+  async deleteSongFromPlaylistBySongId(playlistId, songId) {
+    const query = {
+      text: "DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING id",
+      values: [playlistId, songId],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rows.length === 0) {
+      throw new NotFoundError("Song tidak ditemukan di playlist");
+    }
+  }
 }
 
 module.exports = PlaylistService;

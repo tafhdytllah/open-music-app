@@ -14,4 +14,15 @@ const PlaylistSongPayloadSchema = Joi.object({
   songId: Joi.string().required(),
 });
 
-module.exports = { PlaylistPayloadSchema, PlaylistSongPayloadSchema };
+/**
+ * Schema for Delete Song by id from Playlist Payload
+ */
+const PlaylistDeleteSongPayloadSchema = Joi.object({
+  songId: Joi.string().required(),
+});
+
+module.exports = {
+  PlaylistPayloadSchema,
+  PlaylistSongPayloadSchema,
+  PlaylistDeleteSongPayloadSchema,
+};
