@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const formatDateTime = require("../lib/date-time");
 const InvariantError = require("../exceptions/invariant-error");
 const AuthenticationError = require("../exceptions/authentication-error");
-const NotFoundError = require("../exceptions/not-found-error");
 
 class UserService {
   constructor() {
@@ -88,26 +87,6 @@ class UserService {
     }
 
     return id;
-  }
-
-  /**
-   * Gets a user by their ID.
-   * @param {string} id - The ID of the user to retrieve.
-   * @returns {Promise<Object>} The user object.
-   * @throws {NotFoundError} If the user is not found.
-   */
-  async getUserById(id) {
-    const query = {
-      text: "SELECT id, username, fullname FROM users WHERE id = $1",
-      values: [id],
-    };
-
-    const result = (await this._pool.query(query)).rows[0];
-    if (result === undefined) {
-      throw new NotFoundError("User tidak ditemukan");
-    }
-
-    return result;
   }
 }
 

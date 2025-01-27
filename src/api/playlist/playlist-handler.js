@@ -20,14 +20,12 @@ class PlaylistHandler {
   async postPlaylistHandler(request, h) {
     this._validator.validatePostPlaylistPayload(request.payload);
 
-    const { id: credentialId } = request.auth.credentials;
     const { name } = request.payload;
-
-    await this._userService.getUserById(credentialId);
+    const { id: credentialId } = request.auth.credentials;
 
     const playlistId = await this._playlistService.createPlaylist({
       name,
-      credentialId,
+      owner: credentialId,
     });
 
     const response = h.response({
@@ -49,8 +47,6 @@ class PlaylistHandler {
   async getPlaylistHandler(request, h) {
     const { id: credentialId } = request.auth.credentials;
 
-    await this._userService.getUserById(credentialId);
-
     const playlists = await this._playlistService.getPlaylists(credentialId);
 
     const response = h.response({
@@ -58,6 +54,28 @@ class PlaylistHandler {
       data: {
         playlists,
       },
+    });
+    response.code(200);
+    return response;
+  }
+
+  /**
+   * Handles the request to delete a playlist by its ID.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
+  async deletePlaylistByIdHandler(request, h) {
+    const { id } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._playlistService.verifyPlaylistOwner(id, credentialId);
+
+    await this._playlistService.deletePlaylistById(id);
+
+    const response = h.response({
+      status: "success",
+      message: "Playlist berhasil dihapus",
     });
     response.code(200);
     return response;

@@ -18,6 +18,14 @@ const routes = (handler) => [
       auth: "openmusic_jwt",
     },
   },
+  {
+    method: "DELETE",
+    path: "/playlists/{id}",
+    handler: (request, h) => handler.deletePlaylistByIdHandler(request, h),
+    options: {
+      auth: "openmusic_jwt",
+    },
+  },
 ];
 
 module.exports = routes;
