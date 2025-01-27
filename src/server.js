@@ -107,6 +107,9 @@ const init = async () => {
   server.ext("onPreResponse", (request, h) => {
     const { response } = request;
 
+    /**
+     * Client Error
+     */
     if (response instanceof ClientError) {
       const newResponse = h.response({
         status: "fail",
@@ -114,6 +117,20 @@ const init = async () => {
       });
 
       newResponse.code(response.statusCode);
+      return newResponse;
+    }
+
+    /**
+     * Internal Server Error
+     */
+    // @ts-ignore
+    if (response.isServer) {
+      const newResponse = h.response({
+        status: "fail",
+        message: "Maaf, terjadi kegagalan pada server kami.",
+      });
+
+      newResponse.code(500);
       return newResponse;
     }
 
