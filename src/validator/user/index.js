@@ -12,7 +12,11 @@ const UserValidator = {
     const validationResult = UserPayloadSchema.validate(payload);
 
     if (validationResult.error) {
-      throw new InvariantError(validationResult.error.message);
+      const errorMessage = validationResult.error.details[0].message.replace(
+        /"/g,
+        "",
+      );
+      throw new InvariantError(errorMessage);
     }
   },
 };

@@ -3,6 +3,7 @@ const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
 const formatDateTime = require("../lib/date-time");
 const InvariantError = require("../exceptions/invariant-error");
+const AuthenticationError = require("../exceptions/authentication-error");
 
 class UserService {
   constructor() {
@@ -57,6 +58,35 @@ class UserService {
         "Gagal menambahkan user. Username sudah digunakan.",
       );
     }
+  }
+
+  /**
+   * Verifies the user's credentials.
+   * @param {string} username - The username of the user.
+   * @param {string} password - The password of the user.
+   * @returns {Promise<string>} The ID of the user if the credentials are valid.
+   * @throws {AuthenticationError} If the credentials are invalid.
+   */
+  async verifyUserCredential(username, password) {
+    const query = {
+      text: "SELECT id, password FROM users WHERE username = $1",
+      values: [username],
+    };
+
+    const result = await this._pool.query(query);
+    if (result.rowCount === 0) {
+      throw new AuthenticationError("Kredensial yang Anda berikan salah");
+    }
+
+    const { id, password: hashedPassword } = result.rows[0];
+
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    if (!match) {
+      throw new AuthenticationError("Kredensial yang Anda berikan salah");
+    }
+
+    return id;
   }
 }
 
