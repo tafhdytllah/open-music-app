@@ -38,6 +38,21 @@ class AuthenticationService {
       throw new InvariantError("Refresh token tidak valid");
     }
   }
+
+  /**
+   * Deletes a refresh token from the database.
+   * @param {string} token - The refresh token to delete.
+   * @returns {Promise<void>} A promise that resolves when the token is deleted.
+   * @throws {InvariantError} If the token is not found.
+   */
+  async deleteRefreshToken(token) {
+    const query = {
+      text: "DELETE FROM authentications WHERE token = $1",
+      values: [token],
+    };
+
+    await this._pool.query(query);
+  }
 }
 
 module.exports = AuthenticationService;

@@ -71,6 +71,29 @@ class AuthenticationHandler {
 
     return response;
   }
+
+  /**
+   * Handles the request to delete a refresh token.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object.
+   */
+  async deleteAuthenticationHandler(request, h) {
+    this._validator.validateDeleteAuthenticationPayload(request.payload);
+
+    const { refreshToken } = request.payload;
+    await this._authenticationService.verifyRefreshToken(refreshToken);
+
+    await this._authenticationService.deleteRefreshToken(refreshToken);
+
+    const response = h.response({
+      status: "success",
+      message: "Refresh token berhasil dihapus",
+    });
+    response.code(200);
+
+    return response;
+  }
 }
 
 module.exports = AuthenticationHandler;
