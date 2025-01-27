@@ -26,4 +26,22 @@ const mapSongDbtoSongModel = ({ id, title, performer }) => ({
   performer: performer,
 });
 
-module.exports = { mapAlbumDbtoAlbumModel, mapSongDbtoSongModel };
+/**
+ * Maps playlist database object to playlist model.
+ * @param {Object} param - The song database object.
+ * @param {string} param.id - The ID of the playlist.
+ * @param {string} param.name - The name of the playlist.
+ * @param {string} param.username - The performer of the playlist.
+ * @returns {Object} The playlist model.
+ */
+const mapPlaylistDbtoPlaylistModel = ({ id, name, username }) => ({
+  id,
+  name,
+  username,
+});
+
+module.exports = {
+  mapAlbumDbtoAlbumModel,
+  mapSongDbtoSongModel,
+  mapPlaylistDbtoPlaylistModel,
+};

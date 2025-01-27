@@ -2,6 +2,7 @@ const { nanoid } = require("nanoid");
 const { Pool } = require("pg");
 const formatDateTime = require("../lib/date-time");
 const InvariantError = require("../exceptions/invariant-error");
+const { mapPlaylistDbtoPlaylistModel } = require("../utils");
 
 class PlaylistService {
   constructor() {
@@ -31,6 +32,22 @@ class PlaylistService {
     }
 
     return result.rows[0].id;
+  }
+
+  /**
+   * Retrieves playlists owned by or shared with the specified user.
+   * @param {string} credentialId - The ID of the user.
+   * @returns {Promise<Object[]>} A promise that resolves to an array of playlist objects.
+   */
+  async getPlaylists(credentialId) {
+    const query = {
+      text: "select p.id, p.name, u.username from playlists as p left join users as u on u.id = p.owner where p.owner = $1 or u.id = $1 group by p.id, u.username;",
+      values: [credentialId],
+    };
+
+    const result = await this._pool.query(query);
+
+    return result.rows.map(mapPlaylistDbtoPlaylistModel);
   }
 }
 
