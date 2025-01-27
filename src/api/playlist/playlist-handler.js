@@ -40,6 +40,12 @@ class PlaylistHandler {
     return response;
   }
 
+  /**
+   * Handles the request to get playlists owned by or shared with the specified user.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object containing the list of playlists.
+   */
   async getPlaylistHandler(request, h) {
     const { id: credentialId } = request.auth.credentials;
 
