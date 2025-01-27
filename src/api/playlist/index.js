@@ -17,12 +17,17 @@ module.exports = {
    * @param {Object} options - The plugin options.
    * @param {Object} options.playlistService - The playlist service instance.
    * @param {Object} options.userService - The user service instance.
+   * @param {Object} options.songService - The song service instance.
    * @param {Object} options.validator - The validator instance.
    */
-  register: async (server, { playlistService, userService, validator }) => {
+  register: async (
+    server,
+    { playlistService, userService, songService, validator },
+  ) => {
     const playlistHandler = new PlaylistHandler(
       playlistService,
       userService,
+      songService,
       validator,
     );
     server.route(routes(playlistHandler));

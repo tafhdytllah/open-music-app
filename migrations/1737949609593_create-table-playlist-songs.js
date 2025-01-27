@@ -17,6 +17,8 @@ exports.up = (pgm) => {
       references: "songs(id)",
       onDelete: "CASCADE",
     },
+    created_at: { type: "TEXT", notNull: true },
+    updated_at: { type: "TEXT", notNull: true },
   });
 
   pgm.addConstraint(

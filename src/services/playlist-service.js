@@ -61,6 +61,21 @@ class PlaylistService {
     return result.rows[0].id;
   }
 
+  async addSongToPlaylist(playlistId, songId) {
+    const id = `playlist-song-${nanoid(16)}`;
+    const created_at = formatDateTime(new Date());
+
+    const query = {
+      text: "INSERT INTO playlist_songs(id, playlist_id, song_id, created_at, updated_at) VALUES($1, $2, $3, $4, $4) RETURNING id",
+      values: [id, playlistId, songId, created_at],
+    };
+
+    const result = await this._pool.query(query);
+    if (result.rows.length === 0) {
+      throw new InvariantError("Failed to add song to playlist");
+    }
+  }
+
   /**
    * Retrieves playlists owned by or shared with the specified user.
    * @param {string} owner - The ID of the user.
