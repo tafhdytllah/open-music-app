@@ -44,6 +44,33 @@ class AuthenticationHandler {
 
     return response;
   }
+
+  /**
+   * Handles the request to refresh an access token.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object containing the new access token.
+   */
+  async putAuthenticationHandler(request, h) {
+    this._validator.validatePutAuthenticationPayload(request.payload);
+
+    const { refreshToken } = request.payload;
+    await this._authenticationService.verifyRefreshToken(refreshToken);
+
+    const { id } = this._tokenManager.verifyRefreshToken(refreshToken);
+
+    const accessToken = this._tokenManager.generateAccessToken({ id });
+
+    const response = h.response({
+      status: "success",
+      data: {
+        accessToken,
+      },
+    });
+    response.code(200);
+
+    return response;
+  }
 }
 
 module.exports = AuthenticationHandler;
