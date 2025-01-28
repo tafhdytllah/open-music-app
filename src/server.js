@@ -108,23 +108,25 @@ const init = async () => {
     const { response } = request;
 
     /**
-     * Client Error
+     * Error handler
      */
-    if (response instanceof ClientError) {
-      const newResponse = h.response({
-        status: "fail",
-        message: response.message,
-      });
+    if (response instanceof Error) {
+      // Client Error handler secara internal
+      if (response instanceof ClientError) {
+        const newResponse = h.response({
+          status: "fail",
+          message: response.message,
+        });
 
-      newResponse.code(response.statusCode);
-      return newResponse;
-    }
+        newResponse.code(response.statusCode);
+        return newResponse;
+      }
+      //mempertahankan penanganan client error oleh hapi secara native, seperti 404, etc
+      if (!response.isServer) {
+        return h.continue;
+      }
 
-    /**
-     * Internal Server Error
-     */
-    // @ts-ignore
-    if (response.isServer) {
+      // Internal Server Error handle sesuai kebutuhan
       const newResponse = h.response({
         status: "fail",
         message: "Maaf, terjadi kegagalan pada server kami.",
@@ -134,6 +136,7 @@ const init = async () => {
       return newResponse;
     }
 
+    // jika bukan error, lanjutkan dengan response sebelumnya (tanpa terintervensi)
     return h.continue;
   });
 
