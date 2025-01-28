@@ -10,8 +10,32 @@ const NotFoundError = require("../exceptions/not-found-error");
 const AuthorizationError = require("../exceptions/authorization-error");
 
 class PlaylistService {
-  constructor() {
+  constructor(collaborationService) {
+    this._collaboratinService = collaborationService;
     this._pool = new Pool();
+  }
+
+  /**
+   * Verifies if a user has access to a specific playlist.
+   * @param {string} playlistId - The ID of the playlist.
+   * @param {string} userId - The ID of the user to verify.
+   * @returns {Promise<void>} A promise that resolves if the user has access to the playlist.
+   * @throws {NotFoundError} If the playlist is not found.
+   * @throws {AuthorizationError} If the user does not have access to the playlist.
+   */
+  async verifyPlaylistAccess(playlistId, userId) {
+    try {
+      await this.verifyPlaylistOwner(playlistId, userId);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw error;
+      }
+      try {
+        await this._collaboratinService.verifyCollaborator(playlistId, userId);
+      } catch {
+        throw error;
+      }
+    }
   }
 
   /**
@@ -64,6 +88,13 @@ class PlaylistService {
     return result.rows[0].id;
   }
 
+  /**
+   * Adds a song to a playlist.
+   * @param {string} playlistId - The ID of the playlist.
+   * @param {string} songId - The ID of the song to add.
+   * @returns {Promise<string>} A promise that resolves to the ID of the newly added song in the playlist.
+   * @throws {InvariantError} If the song could not be added to the playlist.
+   */
   async addSongToPlaylist(playlistId, songId) {
     const id = `playlist-song-${nanoid(16)}`;
     const created_at = formatDateTime(new Date());
@@ -77,6 +108,8 @@ class PlaylistService {
     if (result.rows.length === 0) {
       throw new InvariantError("Failed to add song to playlist");
     }
+
+    return result.rows[0].id;
   }
 
   /**
@@ -86,7 +119,7 @@ class PlaylistService {
    */
   async getPlaylists(owner) {
     const query = {
-      text: "select p.id, p.name, u.username from playlists as p left join users as u on u.id = p.owner where p.owner = $1 or u.id = $1 group by p.id, u.username",
+      text: "SELECT p.id, p.name, u.username FROM playlists AS p LEFT JOIN collaborations AS c ON c.playlist_id = p.id LEFT JOIN users AS u ON u.id = p.owner WHERE p.owner = $1 OR c.user_id = $1 GROUP BY p.id, u.username",
       values: [owner],
     };
 

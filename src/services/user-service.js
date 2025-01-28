@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const formatDateTime = require("../lib/date-time");
 const InvariantError = require("../exceptions/invariant-error");
 const AuthenticationError = require("../exceptions/authentication-error");
+const NotFoundError = require("../exceptions/not-found-error");
 
 class UserService {
   constructor() {
@@ -87,6 +88,24 @@ class UserService {
     }
 
     return id;
+  }
+
+  /**
+   * Verifies if a user exists by their ID.
+   * @param {string} userId - The ID of the user to verify.
+   * @returns {Promise<void>} A promise that resolves if the user exists.
+   * @throws {NotFoundError} If the user is not found.
+   */
+  async verifyUserExists(userId) {
+    const query = {
+      text: "SELECT id FROM users WHERE id = $1",
+      values: [userId],
+    };
+
+    const result = await this._pool.query(query);
+    if (result.rowCount === 0) {
+      throw new NotFoundError("User tidak ditemukan");
+    }
   }
 }
 
