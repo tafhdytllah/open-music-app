@@ -10,8 +10,9 @@ const NotFoundError = require("../exceptions/not-found-error");
 const AuthorizationError = require("../exceptions/authorization-error");
 
 class PlaylistService {
-  constructor(collaborationService) {
+  constructor(collaborationService, activityService) {
     this._collaboratinService = collaborationService;
+    this._activityService = activityService;
     this._pool = new Pool();
   }
 
@@ -95,7 +96,7 @@ class PlaylistService {
    * @returns {Promise<string>} A promise that resolves to the ID of the newly added song in the playlist.
    * @throws {InvariantError} If the song could not be added to the playlist.
    */
-  async addSongToPlaylist(playlistId, songId) {
+  async addSongToPlaylist(playlistId, songId, credentialId) {
     const id = `playlist-song-${nanoid(16)}`;
     const created_at = formatDateTime(new Date());
 
@@ -108,6 +109,13 @@ class PlaylistService {
     if (result.rows.length === 0) {
       throw new InvariantError("Failed to add song to playlist");
     }
+
+    await this._activityService.recordActivity(
+      playlistId,
+      songId,
+      credentialId,
+      "ADD SONG",
+    );
 
     return result.rows[0].id;
   }
@@ -183,7 +191,7 @@ class PlaylistService {
    * @returns {Promise<void>} A promise that resolves when the song is deleted from the playlist.
    * @throws {NotFoundError} If the song is not found in the playlist.
    */
-  async deleteSongFromPlaylistBySongId(playlistId, songId) {
+  async deleteSongFromPlaylistBySongId(playlistId, songId, credentialId) {
     const query = {
       text: "DELETE FROM playlist_songs WHERE playlist_id = $1 AND song_id = $2 RETURNING id",
       values: [playlistId, songId],
@@ -194,6 +202,13 @@ class PlaylistService {
     if (result.rows.length === 0) {
       throw new NotFoundError("Song tidak ditemukan di playlist");
     }
+
+    await this._activityService.recordActivity(
+      playlistId,
+      songId,
+      credentialId,
+      "DELETE SONG",
+    );
   }
 }
 

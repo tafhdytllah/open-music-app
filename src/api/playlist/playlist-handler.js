@@ -146,7 +146,7 @@ class PlaylistHandler {
    * @param {Object} h - The response toolkit.
    * @returns {Promise<Object>} The response object.
    */
-  async deleteSongFromPlaylistBySongId(request, h) {
+  async deleteSongFromPlaylistBySongIdHandler(request, h) {
     this._validator.validateDeleteSongFromPlaylistPayload(request.payload);
 
     const { id: playlistId } = request.params;
@@ -158,6 +158,7 @@ class PlaylistHandler {
     await this._playlistService.deleteSongFromPlaylistBySongId(
       playlistId,
       songId,
+      credentialId,
     );
 
     const response = h.response({

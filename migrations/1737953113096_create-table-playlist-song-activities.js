@@ -11,28 +11,11 @@ exports.up = (pgm) => {
       references: "playlists(id)",
       onDelete: "CASCADE",
     },
-    song_id: {
-      type: "VARCHAR(50)",
-      notNull: true,
-      references: "songs(id)",
-      onDelete: "CASCADE",
-    },
-    user_id: {
-      type: "VARCHAR(50)",
-      notNull: true,
-      references: "users(id)",
-      onDelete: "CASCADE",
-    },
+    song_id: { type: "VARCHAR(50)", notNull: true },
+    user_id: { type: "VARCHAR(50)", notNull: true },
     action: { type: "TEXT", notNull: true },
     time: { type: "TEXT", notNull: true },
-    created_at: { type: "TEXT", notNull: true },
   });
-
-  pgm.addConstraint(
-    "playlist_song_activities",
-    "unique_playlist_id_and_song_id_and_user_id",
-    "UNIQUE(playlist_id, song_id, user_id)",
-  );
 };
 
 /**

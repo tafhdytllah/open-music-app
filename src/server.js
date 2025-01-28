@@ -8,6 +8,7 @@ const UserService = require("./services/user-service");
 const AuthenticationService = require("./services/authentication-service");
 const PlaylistService = require("./services/playlist-service");
 const CollaborationService = require("./services/collaboration-service");
+const ActivityService = require("./services/activity-service");
 const album = require("./api/album");
 const song = require("./api/song");
 const user = require("./api/user");
@@ -29,7 +30,11 @@ const init = async () => {
   const songService = new SongService();
   const userService = new UserService();
   const authenticationService = new AuthenticationService();
-  const playlistService = new PlaylistService(collaborationService);
+  const activityService = new ActivityService();
+  const playlistService = new PlaylistService(
+    collaborationService,
+    activityService,
+  );
 
   const server = Hapi.server({
     port: process.env.PORT,
