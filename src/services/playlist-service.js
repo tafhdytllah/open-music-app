@@ -114,7 +114,7 @@ class PlaylistService {
       playlistId,
       songId,
       credentialId,
-      "ADD SONG",
+      "add",
     );
 
     return result.rows[0].id;
@@ -207,7 +207,7 @@ class PlaylistService {
       playlistId,
       songId,
       credentialId,
-      "DELETE SONG",
+      "delete",
     );
   }
 }

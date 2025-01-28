@@ -6,10 +6,17 @@ class PlaylistHandler {
    * @param {Object} songService - The song service instance.
    * @param {Object} validator - The validator instance.
    */
-  constructor(playlistService, userService, songService, validator) {
+  constructor(
+    playlistService,
+    userService,
+    songService,
+    activityService,
+    validator,
+  ) {
     this._playlistService = playlistService;
     this._userService = userService;
     this._songService = songService;
+    this._activityService = activityService;
     this._validator = validator;
   }
 
@@ -115,6 +122,34 @@ class PlaylistHandler {
       },
     });
     response.code(200);
+    return response;
+  }
+
+  /**
+   * Handles the request to get activity records from a playlist.
+   * @param {Object} request - The request object.
+   * @param {Object} h - The response toolkit.
+   * @returns {Promise<Object>} The response object containing the list of activity records.
+   */
+  async getActivityRecordFromPlaylistHandler(request, h) {
+    const { id: playlistId } = request.params;
+    const { id: credentialId } = request.auth.credentials;
+
+    await this._playlistService.verifyPlaylistOwner(playlistId, credentialId);
+
+    const activities = await this._activityService.getActivityRecordPlaylist(
+      playlistId,
+    );
+
+    const response = h.response({
+      status: "success",
+      data: {
+        playlistId,
+        activities,
+      },
+    });
+    response.code(200);
+
     return response;
   }
 

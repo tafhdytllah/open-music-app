@@ -105,6 +105,7 @@ const init = async () => {
         playlistService,
         userService,
         songService,
+        activityService,
         validator: PlaylistValidator,
       },
     },

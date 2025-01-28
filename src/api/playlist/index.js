@@ -18,16 +18,18 @@ module.exports = {
    * @param {Object} options.playlistService - The playlist service instance.
    * @param {Object} options.userService - The user service instance.
    * @param {Object} options.songService - The song service instance.
+   * @param {Object} options.activityService - The activity service instance.
    * @param {Object} options.validator - The validator instance.
    */
   register: async (
     server,
-    { playlistService, userService, songService, validator },
+    { playlistService, userService, songService, activityService, validator },
   ) => {
     const playlistHandler = new PlaylistHandler(
       playlistService,
       userService,
       songService,
+      activityService,
       validator,
     );
     server.route(routes(playlistHandler));
