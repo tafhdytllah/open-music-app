@@ -293,3 +293,69 @@ Response Body (200 OK) :
   }
 }
 ```
+
+### POST export music playlist
+
+Description: Export Songs from Playlist Feature
+
+- Endpoint : POST /export/playlists/{playlistId}
+
+Request Header :
+
+- Content-Type : "application/json"
+
+Request Body :
+
+```
+{
+  "targetEmail": string
+}
+```
+
+Response Body (201 CREATED) :
+
+```
+{
+  "status": "success",
+  "message": "Permintaan Anda sedang kami proses",
+}
+```
+
+Ketentuan:
+
+- Wajib menggunakan message broker dengan menggunakan RabbitMQ.
+  - Nilai host server RabbitMQ wajib menggunakan environment variable RABBITMQ_SERVER
+- Hanya pemilik Playlist yang boleh mengekspor lagu.
+- Wajib mengirimkan program consumer.
+- Hasil ekspor berupa data json.
+- Dikirimkan melalui email menggunakan nodemailer.
+  - Kredensial user dan password email pengirim wajib menggunakan environment variable SMTP_USER dan SMTP_PASSWORD.
+  - Serta, nilai host dan port dari server SMTP juga wajib menggunakan environment variable SMTP_HOST dan SMTP_PORT.
+
+Struktur data JSON yang diekspor adalah seperti ini:
+
+```
+{
+  "playlist": {
+    "id": "playlist-Mk8AnmCp210PwT6B",
+    "name": "My Favorite Coldplay Song",
+    "songs": [
+      {
+        "id": "song-Qbax5Oy7L8WKf74l",
+        "title": "Life in Technicolor",
+        "performer": "Coldplay"
+      },
+      {
+        "id": "song-poax5Oy7L8WKllqw",
+        "title": "Centimeteries of London",
+        "performer": "Coldplay"
+      },
+      {
+        "id": "song-Qalokam7L8WKf74l",
+        "title": "Lost!",
+        "performer": "Coldplay"
+      }
+    ]
+  }
+}
+```
