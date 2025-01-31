@@ -10,6 +10,14 @@ class AlbumService {
     this._pool = new Pool();
   }
 
+  /**
+   * Inserts a new album into the database.
+   * @param {Object} param0 - The album details.
+   * @param {string} param0.name - The name of the album.
+   * @param {number} param0.year - The year of the album.
+   * @returns {Promise<string>} The ID of the newly created album.
+   * @throws {InvariantError} If the album could not be created.
+   */
   async insertAlbum({ name, year }) {
     const id = `album-${nanoid(16)}`;
     const createdAt = formatDateTime(new Date());
@@ -28,6 +36,12 @@ class AlbumService {
     return result.rows[0].id;
   }
 
+  /**
+   * Finds an album by its ID in the database.
+   * @param {string} id - The ID of the album to find.
+   * @returns {Promise<Object>} A promise that resolves to the album object.
+   * @throws {NotFoundError} If the album is not found.
+   */
   async findAlbumById(id) {
     const queryAlbum = {
       text: "SELECT * FROM albums WHERE id = $1",
@@ -53,6 +67,15 @@ class AlbumService {
     return newAlbum;
   }
 
+  /**
+   * Updates an album by its ID in the database.
+   * @param {string} id - The ID of the album to update.
+   * @param {Object} param1 - The album details to update.
+   * @param {string} param1.name - The name of the album.
+   * @param {number} param1.year - The year of the album.
+   * @returns {Promise<void>} A promise that resolves when the album is updated.
+   * @throws {NotFoundError} If the album is not found.
+   */
   async updateAlbumById(id, { name, year }) {
     const updatedAt = formatDateTime(new Date());
     const query = {
@@ -67,6 +90,12 @@ class AlbumService {
     }
   }
 
+  /**
+   * Deletes an album by its ID from the database.
+   * @param {string} id - The ID of the album to delete.
+   * @returns {Promise<void>} A promise that resolves when the album is deleted.
+   * @throws {NotFoundError} If the album is not found.
+   */
   async deleteAlbumById(id) {
     const query = {
       text: "DELETE FROM albums WHERE id = $1",

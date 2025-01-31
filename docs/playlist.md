@@ -252,3 +252,44 @@ Response Body (404 NOT FOUND) :
   "message": "error message payload validation"
 }
 ```
+
+### GET Playlist Activities
+
+Description : mencatat riwayat menambah atau menghapus lagu dari playlist oleh pengguna atau kolaborator
+
+- Endpoint : GET /playlists/{id}/activities
+
+Request Body :
+
+- Content-Type : "application/json"
+
+Response Body (200 OK) :
+
+```
+{
+  "status": "success",
+  "data": {
+    "playlistId": "playlist-Mk8AnmCp210PwT6B",
+    "activities": [
+      {
+        "username": "dicoding",
+        "title": "Life in Technicolor",
+        "action": "add",
+        "time": "2021-09-13T08:06:20.600Z"
+      },
+      {
+        "username": "dicoding",
+        "title": "Centimeteries of London",
+        "action": "add",
+        "time": "2021-09-13T08:06:39.852Z"
+      },
+      {
+        "username": "dimasmds",
+        "title": "Life in Technicolor",
+        "action": "delete",
+        "time": "2021-09-13T08:07:01.483Z"
+      }
+    ]
+  }
+}
+```

@@ -1,5 +1,6 @@
 /**
- * @param {import("./album-handler")} handler
+ * Defines the routes for the album API.
+ * @param {import("./album-handler")} handler - The album handler instance.
  */
 const albumRoutes = (handler) => [
   {
