@@ -1,9 +1,9 @@
 const InvariantError = require("../../exceptions/invariant-error");
-const ExportNotesPayloadSchema = require("./schema");
+const ExportPlaylistPayloadSchema = require("./schema");
 
 const ExportsValidator = {
-  validateExportNotesPayload: (payload) => {
-    const validationResult = ExportNotesPayloadSchema.validate(payload);
+  validateExportPlaylistsPayload: (payload) => {
+    const validationResult = ExportPlaylistPayloadSchema.validate(payload);
     if (validationResult.error) {
       const errorMessage = validationResult.error.details[0].message.replace(
         /"/g,

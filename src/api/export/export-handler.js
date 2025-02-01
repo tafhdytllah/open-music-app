@@ -5,8 +5,8 @@ class ExportHandler {
     this._validator = validator;
   }
 
-  async postExportNotesHandler(request, h) {
-    this._validator.validateExportNotesPayload(request.payload);
+  async postExportPlaylistHandler(request, h) {
+    this._validator.validateExportPlaylistPayload(request.payload);
 
     const { id: credentialId } = request.auth.credentials;
     const { id: playlistId } = request.params;
