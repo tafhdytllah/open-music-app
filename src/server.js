@@ -9,15 +9,18 @@ const AuthenticationService = require("./services/authentication-service");
 const PlaylistService = require("./services/playlist-service");
 const CollaborationService = require("./services/collaboration-service");
 const ActivityService = require("./services/activity-service");
+const ProducerService = require("./services/producer-service");
 const album = require("./api/album");
 const song = require("./api/song");
 const user = require("./api/user");
 const playlist = require("./api/playlist");
+const _export = require("./api/export");
 const authentication = require("./api/authentication");
 const collaboration = require("./api/collaboration");
 const AlbumValidator = require("./validator/album");
 const SongValidator = require("./validator/song");
 const UserValidator = require("./validator/user");
+const ExportValidator = require("./validator/export");
 const AuthenticationValidator = require("./validator/authentication");
 const TokenManager = require("./tokenize/token-manager");
 const PlaylistValidator = require("./validator/playlist");
@@ -116,6 +119,14 @@ const init = async () => {
         playlistService,
         userService,
         validator: CollaborationValidator,
+      },
+    },
+    {
+      plugin: _export,
+      options: {
+        producerService: ProducerService,
+        playlistService: playlistService,
+        validator: ExportValidator,
       },
     },
   ]);
