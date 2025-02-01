@@ -68,6 +68,7 @@ Response Body (200 OK) :
       "id": "album-Mk8AnmCp210PwT6B",
       "name": "Viva la Vida",
       "year": 2008,
+      "coverUrl": "http://....", // updated from POST Cover Album
       "songs": [
         {
           "id": "song-Qbax5Oy7L8WKf74l",
@@ -171,5 +172,56 @@ Response Body (404 NOT FOUND) :
 {
   "status": "fail",
   "message": "error message resource not found"
+}
+```
+
+### Post Cover Album
+
+Ketentuan:
+
+URL gambar harus dapat diakses dengan baik.
+Bila album belum memiliki sampul, maka coverUrl bernilai null.
+Bila menambahkan sampul pada album yang sudah memiliki sampul, maka sampul lama akan tergantikan.
+
+Description: Upload cover album
+
+- Endpoint : POST /albums/{id}/covers
+
+Request Header :
+
+- Content-Type : "multipart/form-data"
+
+Request Body (Form Data):
+
+```
+{
+  "cover": "file" // MIME types dari images, max size 512000 Bytes,
+}
+```
+
+Response Body (201 CREATED) :
+
+```
+{
+  "status": "success",
+  "message": "Sampul berhasil diunggah"
+}
+```
+
+Response Body (400 BAD REQUEST) :
+
+```
+{
+  "status": "fail",
+  "message": "error message payload validation"
+}
+```
+
+Response Body (500 INTERNAL SERVER ERROR) :
+
+```
+{
+  "status": "fail",
+  "message": "error message internal error server"
 }
 ```
