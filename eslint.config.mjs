@@ -9,6 +9,7 @@ export default [
       sourceType: "commonjs",
       globals: {
         process: "readonly", // Definisikan 'process' sebagai variabel global
+        __dirname: "readonly", // Define '__dirname' as a global variable
       },
     },
   },
