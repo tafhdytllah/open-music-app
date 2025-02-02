@@ -21,11 +21,11 @@ const config = {
   },
   rabbitmq: {
     server: process.env.RABBITMQ_SERVER,
-    maxUploadSize: parseInt(process.env.MAX_FILE_UPLOAD_SIZE, 10),
+    // maxUploadSize: parseInt(process.env.MAX_FILE_UPLOAD_SIZE, 10),
   },
   redis: {
     host: process.env.REDIS_HOST,
-    cacheExpiration: parseInt(process.env.REDIS_CACHE_EXPIRATION, 10),
+    // cacheExpiration: parseInt(process.env.REDIS_CACHE_EXPIRATION, 10),
   },
 };
 
