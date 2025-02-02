@@ -28,7 +28,7 @@ class ActivityService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError("Failed to record activity");
     }
   }
@@ -46,7 +46,7 @@ class ActivityService {
 
     const result = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!result.rowCount) {
       throw new InvariantError("Gagal mendapatkan activity record playlist");
     }
 

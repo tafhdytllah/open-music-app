@@ -1,3 +1,5 @@
+const config = require("../../utils/config");
+
 /**
  * Defines the routes for the upload API.
  * @param {import("./upload-handler")} handler - The upload handler instance.
@@ -12,7 +14,7 @@ const uploadRoutes = (handler) => [
         allow: "multipart/form-data",
         multipart: true,
         output: "stream",
-        maxBytes: 512000, // 512kb
+        maxBytes: config.rabbitmq.maxUploadSize, // 512kb
       },
     },
   },

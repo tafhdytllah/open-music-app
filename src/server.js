@@ -13,6 +13,7 @@ const CollaborationService = require("./services/collaboration-service");
 const ActivityService = require("./services/activity-service");
 const StorageService = require("./services/storage-service");
 const AlbumLikeService = require("./services/album-like-service");
+const CacheService = require("./services/cache-service");
 const ProducerService = require("./services/producer-service");
 const album = require("./api/album");
 const song = require("./api/song");
@@ -33,8 +34,10 @@ const TokenManager = require("./tokenize/token-manager");
 const PlaylistValidator = require("./validator/playlist");
 const CollaborationValidator = require("./validator/collaboration");
 const ClientError = require("./exceptions/client-error");
+const config = require("./utils/config");
 
 const init = async () => {
+  const cacheService = new CacheService();
   const collaborationService = new CollaborationService();
   const albumService = new AlbumService();
   const songService = new SongService();
@@ -48,11 +51,11 @@ const init = async () => {
   const storageService = new StorageService(
     path.resolve(__dirname, "api/upload/file/images"),
   );
-  const albumLikeService = new AlbumLikeService();
+  const albumLikeService = new AlbumLikeService(cacheService);
 
   const server = Hapi.server({
-    port: process.env.PORT,
-    host: process.env.HOST,
+    port: config.app.port,
+    host: config.app.host,
     routes: {
       cors: {
         origin: ["*"],
@@ -67,12 +70,12 @@ const init = async () => {
   ]);
 
   server.auth.strategy("openmusic_jwt", "jwt", {
-    keys: process.env.ACCESS_TOKEN_KEY,
+    keys: config.jwt.access.key,
     verify: {
       aud: false,
       iss: false,
       sub: false,
-      maxAgeSec: process.env.ACCESS_TOKEN_AGE,
+      maxAgeSec: config.jwt.access.age,
     },
     validate: (artifacts) => ({
       isValid: true,

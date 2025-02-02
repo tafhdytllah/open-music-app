@@ -25,8 +25,6 @@ class AlbumLikeHandler {
     const { id: credentialId } = request.auth.credentials;
     const { id: albumId } = request.params;
 
-    console.log(albumId, credentialId);
-
     await this._albumLikeService.deleteAlbumLike(credentialId, albumId);
 
     const response = h.response({
@@ -40,15 +38,17 @@ class AlbumLikeHandler {
 
   async getAlbumLikesHandler(request, h) {
     const { id: albumId } = request.params;
-    const albumLikes = await this._albumLikeService.totalAlbumLike(albumId);
+    const { likes, isCache } = await this._albumLikeService.totalAlbumLike(
+      albumId,
+    );
 
     const response = h.response({
       status: "success",
       data: {
-        likes: albumLikes,
+        likes,
       },
     });
-
+    if (isCache) response.header("X-Data-Source", "cache");
     response.code(200);
     return response;
   }
