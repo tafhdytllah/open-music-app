@@ -12,6 +12,7 @@ const PlaylistService = require("./services/playlist-service");
 const CollaborationService = require("./services/collaboration-service");
 const ActivityService = require("./services/activity-service");
 const StorageService = require("./services/storage-service");
+const AlbumLikeService = require("./services/album-like-service");
 const ProducerService = require("./services/producer-service");
 const album = require("./api/album");
 const song = require("./api/song");
@@ -21,6 +22,7 @@ const _export = require("./api/export");
 const upload = require("./api/upload");
 const authentication = require("./api/authentication");
 const collaboration = require("./api/collaboration");
+const albumLike = require("./api/album-like");
 const AlbumValidator = require("./validator/album");
 const SongValidator = require("./validator/song");
 const UserValidator = require("./validator/user");
@@ -46,6 +48,7 @@ const init = async () => {
   const storageService = new StorageService(
     path.resolve(__dirname, "api/upload/file/images"),
   );
+  const albumLikeService = new AlbumLikeService();
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -85,6 +88,13 @@ const init = async () => {
       options: {
         service: albumService,
         validator: AlbumValidator,
+      },
+    },
+    {
+      plugin: albumLike,
+      options: {
+        albumLikeService,
+        albumService,
       },
     },
     {
