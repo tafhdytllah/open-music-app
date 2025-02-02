@@ -32,3 +32,6 @@ coverage/
 # Temporary files
 tmp/
 temp/
+
+# Ignore all files in the images directory
+src/api/upload/file/
