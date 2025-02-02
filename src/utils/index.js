@@ -4,12 +4,14 @@
  * @param {string} param.id - The ID of the album.
  * @param {string} param.name - The name of the album.
  * @param {number} param.year - The year of the album.
+ * @param {number} param.cover - The cover_url of the album.
  * @returns {Object} The album model.
  */
-const mapAlbumDbtoAlbumModel = ({ id, name, year }) => ({
+const mapAlbumDbtoAlbumModel = ({ id, name, year, cover = null }) => ({
   id,
   name,
   year,
+  coverUrl: cover,
 });
 
 /**

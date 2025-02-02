@@ -68,6 +68,7 @@ Response Body (200 OK) :
       "id": "album-Mk8AnmCp210PwT6B",
       "name": "Viva la Vida",
       "year": 2008,
+      "coverUrl": "http://....", // updated from POST Cover Album
       "songs": [
         {
           "id": "song-Qbax5Oy7L8WKf74l",
@@ -171,5 +172,111 @@ Response Body (404 NOT FOUND) :
 {
   "status": "fail",
   "message": "error message resource not found"
+}
+```
+
+### Post Cover Album
+
+Ketentuan:
+
+URL gambar harus dapat diakses dengan baik.
+Bila album belum memiliki sampul, maka coverUrl bernilai null.
+Bila menambahkan sampul pada album yang sudah memiliki sampul, maka sampul lama akan tergantikan.
+
+Description: Upload cover album
+
+- Endpoint : POST /albums/{id}/covers
+
+Request Header :
+
+- Content-Type : "multipart/form-data"
+
+Request Body (Form Data):
+
+```
+{
+  "cover": "file" // MIME types dari images, max size 512000 Bytes,
+}
+```
+
+Response Body (201 CREATED) :
+
+```
+{
+  "status": "success",
+  "message": "Sampul berhasil diunggah"
+}
+```
+
+Response Body (400 BAD REQUEST) :
+
+```
+{
+  "status": "fail",
+  "message": "error message payload validation"
+}
+```
+
+### Post Like Album
+
+Keterangan:
+
+- Menyukai atau batal menyukai album merupakan resource strict sehingga dibutuhkan autentikasi untuk mengaksesnya. Hal ini bertujuan untuk mengetahui apakah pengguna sudah menyukai album.
+- Pastikan pengguna hanya bisa menyukai album yang sama sebanyak 1 kali. Kembalikan dengan response code 400 jika pengguna mencoba menyukai album yang sama.
+
+Description: Like album
+
+- Endpoint : POST /albums/{id}/likes
+
+Request Header :
+
+- Content-Type : "application/json"
+
+Response Body (201 CREATED) :
+
+```
+{
+  "status": "success",
+  "message": "Berhasil like album"
+}
+```
+
+### DELETE Unlike Album
+
+Description: Unlike album
+
+- Endpoint : DELETE /albums/{id}/likes
+
+Request Header :
+
+- Content-Type : "application/json"
+
+Response Body (200 OK) :
+
+```
+{
+  "status": "success",
+  "message": "Berhasil unlike album"
+}
+```
+
+### GET Unlike Album
+
+Description: show total likes from album
+
+- Endpoint : GET /albums/{id}/likes
+
+Request Header :
+
+- Content-Type : "application/json"
+
+Response Body (200 OK) :
+
+```
+{
+  "status": "success",
+  "data": {
+    "likes": 0, //number
+  }
 }
 ```

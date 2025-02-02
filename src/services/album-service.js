@@ -90,6 +90,20 @@ class AlbumService {
     }
   }
 
+  async updateCoverAlbumById(id, coverUrl) {
+    const updatedAt = formatDateTime(new Date());
+    const query = {
+      text: "UPDATE albums SET cover = $1, updated_at = $2 WHERE id = $3",
+      values: [coverUrl, updatedAt, id],
+    };
+
+    const result = await this._pool.query(query);
+
+    if (result.rowCount !== 1) {
+      throw new NotFoundError(`Failed edit album, ${id} is not found`);
+    }
+  }
+
   /**
    * Deletes an album by its ID from the database.
    * @param {string} id - The ID of the album to delete.
