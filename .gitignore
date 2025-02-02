@@ -34,4 +34,4 @@ tmp/
 temp/
 
 # Ignore all files in the images directory
-src/api/upload/file/
+src/api/upload/file/images/*
